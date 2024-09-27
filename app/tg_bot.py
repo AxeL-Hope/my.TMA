@@ -25,7 +25,7 @@ keyboard = InlineKeyboardMarkup(
 )
 
 
-# Обработчик команды /start
+# Обработчик команды /start1
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer("Текст", reply_markup=keyboard)
