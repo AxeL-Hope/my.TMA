@@ -18,15 +18,15 @@
             border-radius: 4px;
             padding: 10px;
             margin: 10px 0;
-            white-space: pre-wrap; /* Сохраняет пробелы и переносы */
-            word-wrap: break-word; /* Переносит длинные слова */
-            overflow-wrap: break-word; /* Обеспечивает перенос слов при необходимости */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
             text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1>Init Data 0.0.2</h1>
+    <h1>Init Data 0.0.3</h1>
     <pre id="webview_data"></pre>
     <button id="send_data_btn">Send Data to Bot</button>
     
@@ -47,8 +47,7 @@
                 },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: initData,
-                    parse_mode: "Markdown" // или "HTML" в зависимости от вашего формата
+                    text: initData
                 })
             })
             .then(response => response.json())
