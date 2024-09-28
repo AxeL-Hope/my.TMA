@@ -1,46 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
+    <title>Привет Мир!</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        function sendHelloWorld() {
+            Telegram.WebApp.sendData("Hello, World!");
+        }
+    </script>
 </head>
 <body>
-
-<section id="top_sect">
-    <button id="main_btn" onclick="DemoApp.sendMessage('');">Send «Hello, World!»</button>
-</section>
-
-<script type="application/javascript">
-    const DemoApp = {
-        initData: Telegram.WebApp.initData || '',
-        initDataUnsafe: Telegram.WebApp.initDataUnsafe || {},
-        
-        sendMessage(msg_id) {
-            if (!this.initDataUnsafe.query_id) {
-                alert('WebViewQueryId not defined');
-                return;
-            }
-
-            const btn = document.querySelector('#main_btn');
-            btn.disabled = true;
-
-            // Here you would send the message to your backend
-            console.log('Message sent:', msg_id);
-            
-            btn.disabled = false;
-        },
-
-        init() {
-            document.body.style.visibility = '';
-            if (this.initDataUnsafe.query_id) {
-                document.getElementById('main_btn').style.display = 'block';
-            }
-        }
-    };
-
-    DemoApp.init();
-</script>
-
+    <button onclick="sendHelloWorld()">Привет мир!</button>
 </body>
 </html>
