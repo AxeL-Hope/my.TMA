@@ -4,15 +4,63 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background-color, #ffffff);
+            color: var(--text-color, #000000);
+        }
+
+        #webview_data {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 20px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <pre><code id="webview_data"></code></pre>
+    <div>
+        <pre><code id="webview_data"></code></pre>
+        <button id="copyButton">Копировать данные</button>
+    </div>
 
     <script>
         Telegram.WebApp.ready();
 
+        // Устанавливаем стиль фона на основе выбранной темы Telegram
+        const themeParams = Telegram.WebApp.themeParams || {};
+        document.body.style.setProperty('--background-color', themeParams.bg_color || '#ffffff');
+        document.body.style.setProperty('--text-color', themeParams.text_color || '#000000');
+
         var initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
         document.getElementById('webview_data').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
+
+        // Кнопка для копирования данных в буфер обмена
+        document.getElementById('copyButton').onclick = function() {
+            navigator.clipboard.writeText(document.getElementById('webview_data').textContent)
+                .then(() => {
+                    alert('Данные скопированы в буфер обмена!');
+                })
+                .catch(err => {
+                    console.error('Ошибка копирования: ', err);
+                });
+        };
+
+        // Раскрытие на полный экран
+        if (Telegram.WebApp.isExpanded) {
+            Telegram.WebApp.expand();
+        }
     </script>
 </body>
 </html>
