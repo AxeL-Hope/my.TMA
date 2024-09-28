@@ -1,79 +1,36 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="MobileOptimized" content="176" />
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="robots" content="noindex,nofollow" />
-    <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
-    <title>Мини-приложение для Telegram</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
+            background-color: #ffffff;
+            color: #222222;
+            font-size: 16px;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
         }
-        h1 {
-            color: #0088cc;
-        }
-        button {
-            background-color: #0088cc;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #005f99;
-        }
-        .response {
-            margin-top: 20px;
+        pre {
+            background: rgba(0, 0, 0, .07);
+            border-radius: 4px;
             padding: 10px;
-            border-radius: 5px;
-            background-color: #e6f7ff; /* Светло-голубой фон для текста */
-            border: 1px solid #b3e0ff;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1>Привет, я ваш Telegram бот! в. 0.0.3</h1>
-    <p>Нажмите кнопку, чтобы отправить данные:</p>
-    <button id="getResponse">Отправить данные</button>
+    <h1>Init Data</h1>
+    <pre id="webview_data"></pre>
     
-    <div class="response" id="response"></div>
-
     <script>
-        // Получаем данные WebAppInitData
-        const webAppInitData = window.TelegramWebApp.initData || 'Нет данных';
-
-        document.getElementById('response').innerText = `Данные WebAppInitData: ${webAppInitData}`;
-
-        document.getElementById('getResponse').onclick = function() {
-            // Отправляем данные в чат бота
-            fetch('https://api.telegram.org/bot6984107936:AAGP4F0Rys0BlBWNN0kHQHCNQo1fNl9XUN4/sendMessage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: '6250072652',
-                    text: `WebAppInitData: ${webAppInitData}`
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Вы можете обработать ответ от сервера, если нужно
-                console.log('Ответ от сервера:', data);
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-            });
-        };
+        Telegram.WebApp.ready();
+        var initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+        document.getElementById('webview_data').textContent = JSON.stringify(initDataUnsafe, null, 2);
     </script>
 </body>
 </html>
