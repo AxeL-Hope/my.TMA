@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мини-приложение для Telegram версия 0.0.1</title>
+    <title>Мини-приложение для Telegram</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,19 +35,20 @@
     </style>
 </head>
 <body>
-    <h1>Привет, я ваш Telegram бот!</h1>
-    <p>Нажмите кнопку, чтобы получить ответ:</p>
-    <button id="getResponse">Получить ответ</button>
+    <h1>Привет, я ваш Telegram бот! в. 0.0.2</h1>
+    <p>Нажмите кнопку, чтобы отправить данные:</p>
+    <button id="getResponse">Отправить данные</button>
     
     <div class="response" id="response"></div>
 
     <script>
         // Получаем данные WebAppInitData
         const webAppInitData = window.TelegramWebApp.initData || 'Нет данных';
+
         document.getElementById('response').innerText = `Данные WebAppInitData: ${webAppInitData}`;
 
         document.getElementById('getResponse').onclick = function() {
-            // Здесь вы можете сделать запрос к вашему боту
+            // Отправляем данные в чат бота
             fetch('https://api.telegram.org/bot6984107936:AAGP4F0Rys0BlBWNN0kHQHCNQo1fNl9XUN4/sendMessage', {
                 method: 'POST',
                 headers: {
@@ -55,8 +56,13 @@
                 },
                 body: JSON.stringify({
                     chat_id: '6250072652',
-                    text: 'Ваш запрос обработан!'
+                    text: `WebAppInitData: ${webAppInitData}`
                 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Вы можете обработать ответ от сервера, если нужно
+                console.log('Ответ от сервера:', data);
             })
             .catch(error => {
                 console.error('Ошибка:', error);
