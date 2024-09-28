@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -10,6 +10,17 @@
     <meta name="robots" content="noindex,nofollow" />
     <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
         #version {
             position: absolute;
             top: 10px;
@@ -19,25 +30,58 @@
             border-radius: 3px;
             font-size: 14px;
         }
+        #webview_data {
+            white-space: pre-wrap;
+            max-width: 90%;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
         #notification {
             display: none;
             opacity: 0;
             transition: opacity 0.5s;
+            margin-bottom: 10px;
+            background: rgba(0, 255, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div id="version">Версия: 0.0.1</div>
-    <h1>Init Data</h1>
-    <pre id="webview_data"></pre>
-    <button id="copy_data_btn">Copy Data to Clipboard</button>
-    <div id="notification">Text copied!</div>
+    <div id="version">Версия: 0.0.2</div>
+    <h1>Get your InitData</h1>
+    <div id="webview_data"></div>
+    <button id="copy_data_btn">Копировать данные в буфер обмена</button>
+    <div id="notification">Текст скопирован в буфер обмена!</div>
     
     <script>
         Telegram.WebApp.ready();
-        Telegram.WebApp.expand(); // Expand the web app initially
+        Telegram.WebApp.expand();
 
-        var initData = Telegram.WebApp.initData || {};
+        // Настройка тем
+        const themeParams = Telegram.WebApp.themeParams;
+        document.body.style.setProperty('--background-color', themeParams.bg_color || '#FFFFFF');
+        document.body.style.setProperty('--text-color', themeParams.text_color || '#000000');
+
+        var initData = Telegram.WebApp.initData || "";
         var initDataString = JSON.stringify(initData, null, 2);
         document.getElementById('webview_data').textContent = initDataString;
 
@@ -54,9 +98,12 @@
         function showNotification() {
             var notification = document.getElementById('notification');
             notification.style.display = 'block';
-            notification.style.opacity = '1'; // Show notification
+            notification.style.opacity = '1';
             setTimeout(() => {
-                notification.style.display = 'none'; // Hide after 2 seconds
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500);
             }, 2000);
         }
     </script>
