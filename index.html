@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мини-приложение для Telegram</title>
+    <title>Мини-приложение для Telegram версия 0.0.1</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,9 +28,9 @@
         .response {
             margin-top: 20px;
             padding: 10px;
-            border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #e6f7ff; /* Светло-голубой фон для текста */
+            border: 1px solid #b3e0ff;
         }
     </style>
 </head>
@@ -42,6 +42,10 @@
     <div class="response" id="response"></div>
 
     <script>
+        // Получаем данные WebAppInitData
+        const webAppInitData = window.TelegramWebApp.initData || 'Нет данных';
+        document.getElementById('response').innerText = `Данные WebAppInitData: ${webAppInitData}`;
+
         document.getElementById('getResponse').onclick = function() {
             // Здесь вы можете сделать запрос к вашему боту
             fetch('https://api.telegram.org/bot6984107936:AAGP4F0Rys0BlBWNN0kHQHCNQo1fNl9XUN4/sendMessage', {
@@ -54,12 +58,8 @@
                     text: 'Ваш запрос обработан!'
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('response').innerText = 'Сообщение отправлено!';
-            })
             .catch(error => {
-                document.getElementById('response').innerText = 'Ошибка: ' + error;
+                console.error('Ошибка:', error);
             });
         };
     </script>
