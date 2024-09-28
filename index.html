@@ -14,15 +14,17 @@
             // Отображение данных на странице
             document.getElementById("initData").textContent = "initData: " + initData;
             document.getElementById("initDataUnsafe").textContent = "initDataUnsafe: " + JSON.stringify(initDataUnsafe, null, 2);
+        };
 
-            // Отправка данных боту
-            document.getElementById("sendData").addEventListener("click", function() {
+        const DemoApp = {
+            sendMessage: function(message, withWebview) {
                 const combinedData = {
-                    initData: initData,
-                    initDataUnsafe: initDataUnsafe
+                    initData: Telegram.WebApp.initData,
+                    initDataUnsafe: Telegram.WebApp.initDataUnsafe
                 };
-                Telegram.WebApp.sendData(JSON.stringify(combinedData));
-            });
+                const messageToSend = message || 'Hello, World!';
+                Telegram.WebApp.sendData(JSON.stringify({ message: messageToSend, withWebview: withWebview, data: combinedData }));
+            }
         };
     </script>
 </head>
@@ -30,6 +32,6 @@
     <h1>Telegram WebApp Init Data</h1>
     <pre id="initData"></pre>
     <pre id="initDataUnsafe"></pre>
-    <button id="sendData">Отправить данные боту</button>
+    <button id="with_webview_btn" onclick="DemoApp.sendMessage('', true);">Send «Hello, World!» with inline webview button</button>
 </body>
 </html>
