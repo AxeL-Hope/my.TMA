@@ -26,9 +26,9 @@
     </style>
 </head>
 <body>
-    <h1>Init Data 0.0.3</h1>
+    <h1>Init Data 0.0.4</h1>
     <pre id="webview_data"></pre>
-    <button id="send_data_btn">Send Data to Bot</button>
+    <button id="copy_data_btn">Copy Data to Clipboard</button>
     
     <script>
         Telegram.WebApp.ready();
@@ -36,31 +36,14 @@
         var initData = JSON.stringify(initDataUnsafe, null, 2);
         document.getElementById('webview_data').textContent = initData;
 
-        document.getElementById('send_data_btn').onclick = function() {
-            var botToken = "6984107936:AAGP4F0Rys0BlBWNN0kHQHCNQo1fNl9XUN4";
-            var chatId = "6250072652"; // Замените на ваш chat_id
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: initData
+        document.getElementById('copy_data_btn').onclick = function() {
+            navigator.clipboard.writeText(initData)
+                .then(() => {
+                    alert('Data copied to clipboard!');
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    alert('Data sent successfully!');
-                } else {
-                    alert('Error: ' + data.description);
-                }
-            })
-            .catch(error => {
-                alert('Error sending data: ' + error);
-            });
+                .catch(error => {
+                    alert('Error copying data: ' + error);
+                });
         };
     </script>
 </body>
