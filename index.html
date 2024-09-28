@@ -23,12 +23,24 @@
             overflow-wrap: break-word;
             text-align: left;
         }
+        #notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
-    <h1>Init Data 0.0.4</h1>
+    <h1>Init Data 0.0.5</h1>
     <pre id="webview_data"></pre>
     <button id="copy_data_btn">Copy Data to Clipboard</button>
+    <div id="notification">Text copied!</div>
     
     <script>
         Telegram.WebApp.ready();
@@ -39,12 +51,20 @@
         document.getElementById('copy_data_btn').onclick = function() {
             navigator.clipboard.writeText(initData)
                 .then(() => {
-                    alert('Data copied to clipboard!');
+                    showNotification();
                 })
                 .catch(error => {
                     alert('Error copying data: ' + error);
                 });
         };
+
+        function showNotification() {
+            var notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
+        }
     </script>
 </body>
 </html>
