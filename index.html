@@ -7,11 +7,13 @@
     <style>
         body {
             font-family: sans-serif;
-            background-color: #ffffff;
-            color: #222222;
+            background-color: #ffffff; /* Default light theme */
+            color: #222222; /* Default text color */
             font-size: 16px;
             margin: 0;
             padding: 20px;
+            text-align: center; /* Centered content */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
         }
         pre {
             background: rgba(0, 0, 0, .07);
@@ -23,27 +25,49 @@
             overflow-wrap: break-word;
             text-align: left;
         }
+        #copy_data_btn {
+            background-color: #0088cc; /* Telegram blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s; /* Button hover effect */
+        }
+        #copy_data_btn:hover {
+            background-color: #007bb5; /* Darker blue on hover */
+        }
         #notification {
             display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: absolute; /* Changed to absolute */
+            bottom: 70px; /* Positioning below the button */
+            left: 50%;
+            transform: translateX(-50%);
             background: #4CAF50;
             color: white;
             padding: 10px;
             border-radius: 5px;
             z-index: 1000;
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.5s; /* Smooth fade-in and fade-out */
         }
     </style>
 </head>
 <body>
-    <h1>Init Data 0.0.5</h1>
+    <h1>Init Data 0.0.6</h1>
     <pre id="webview_data"></pre>
     <button id="copy_data_btn">Copy Data to Clipboard</button>
     <div id="notification">Text copied!</div>
     
     <script>
         Telegram.WebApp.ready();
+        
+        // Apply theme based on Telegram's theme
+        const isDarkTheme = Telegram.WebApp.colorScheme === 'dark';
+        document.body.style.backgroundColor = isDarkTheme ? '#222222' : '#ffffff';
+        document.body.style.color = isDarkTheme ? '#ffffff' : '#222222';
+
         var initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
         var initData = JSON.stringify(initDataUnsafe, null, 2);
         document.getElementById('webview_data').textContent = initData;
@@ -61,9 +85,13 @@
         function showNotification() {
             var notification = document.getElementById('notification');
             notification.style.display = 'block';
+            notification.style.opacity = '1'; // Fade in
             setTimeout(() => {
-                notification.style.display = 'none';
-            }, 2000);
+                notification.style.opacity = '0'; // Fade out
+                setTimeout(() => {
+                    notification.style.display = 'none'; // Hide after fade out
+                }, 500); // Match fade out duration
+            }, 2000); // Show for 2 seconds
         }
     </script>
 </body>
