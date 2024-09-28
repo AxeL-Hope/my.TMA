@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Привет Мир!</title>
+    <title>Web App Init Data</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        function sendHelloWorld() {
-            Telegram.WebApp.sendData("Hello, World!");
-        }
+        window.onload = function() {
+            // Получение данных
+            const initData = Telegram.WebApp.initData;
+            const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+
+            // Отображение данных на странице
+            document.getElementById("initData").textContent = "initData: " + initData;
+            document.getElementById("initDataUnsafe").textContent = "initDataUnsafe: " + JSON.stringify(initDataUnsafe, null, 2);
+
+            // Отправка данных боту
+            document.getElementById("sendData").addEventListener("click", function() {
+                const combinedData = {
+                    initData: initData,
+                    initDataUnsafe: initDataUnsafe
+                };
+                Telegram.WebApp.sendData(JSON.stringify(combinedData));
+            });
+        };
     </script>
 </head>
 <body>
-    <button onclick="sendHelloWorld()">Привет мир!</button>
+    <h1>Telegram WebApp Init Data</h1>
+    <pre id="initData"></pre>
+    <pre id="initDataUnsafe"></pre>
+    <button id="sendData">Отправить данные боту</button>
 </body>
 </html>
