@@ -24,13 +24,43 @@
     </style>
 </head>
 <body>
-    <h1>Init Data</h1>
+    <h1>Init Data 0.0.1</h1>
     <pre id="webview_data"></pre>
+    <button id="send_data_btn">Send Data to Bot</button>
     
     <script>
         Telegram.WebApp.ready();
         var initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
-        document.getElementById('webview_data').textContent = JSON.stringify(initDataUnsafe, null, 2);
+        var initData = JSON.stringify(initDataUnsafe, null, 2);
+        document.getElementById('webview_data').textContent = initData;
+
+        document.getElementById('send_data_btn').onclick = function() {
+            var botToken = "6984107936:AAGP4F0Rys0BlBWNN0kHQHCNQo1fNl9XUN4";
+            var chatId = "<YOUR_CHAT_ID>"; // Замените на ваш chat_id
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: initData,
+                    parse_mode: "Markdown" // или "HTML" в зависимости от вашего формата
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Data sent successfully!');
+                } else {
+                    alert('Error: ' + data.description);
+                }
+            })
+            .catch(error => {
+                alert('Error sending data: ' + error);
+            });
+        };
     </script>
 </body>
 </html>
