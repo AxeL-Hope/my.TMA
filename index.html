@@ -30,16 +30,24 @@
         }
 
         button {
-            display: block;
-            width: 100%;
-            font-size: 14px;
-            margin: 15px 0;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            background-color: var(--tg-theme-button-color, #50a8eb);
-            color: var(--tg-theme-button-text-color, #ffffff);
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -48,6 +56,7 @@
         <pre><code id="webview_data"></code></pre>
         <button id="copyButton">Копировать данные</button>
     </div>
+    <div id="toast">Данные скопированы!</div>
 
     <script>
         Telegram.WebApp.ready();
@@ -64,12 +73,21 @@
         document.getElementById('copyButton').onclick = function() {
             navigator.clipboard.writeText(document.getElementById('webview_data').textContent)
                 .then(() => {
-                    alert('Данные скопированы в буфер обмена!');
+                    showToast('Данные скопированы!');
                 })
                 .catch(err => {
                     console.error('Ошибка копирования: ', err);
                 });
         };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000); // Скрыть через 2 секунды
+        }
 
         // Раскрытие на полный экран
         if (Telegram.WebApp.isExpanded) {
