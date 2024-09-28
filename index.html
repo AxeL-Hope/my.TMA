@@ -1,98 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--background-color, #ffffff);
-            color: var(--text-color, #000000);
-        }
-
-        pre {
-            background: rgba(0, 0, 0, 0.07);
-            border-radius: 4px;
-            padding: 4px;
-            margin: 7px 0;
-            word-break: break-all;
-            white-space: pre-wrap;
-            text-align: left;
-        }
-
-        #webview_data {
-            margin: 20px;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        #toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 4px;
-            display: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Frontend</title>
 </head>
 <body>
-    <div>
-        <pre><code id="webview_data"></code></pre>
-        <button id="copyButton">Копировать данные</button>
-    </div>
-    <div id="toast">Данные скопированы!</div>
+    <h1>Items</h1>
+    <ul id="item-list"></ul>
+    <input type="text" id="item-name" placeholder="New item name">
+    <button id="add-item">Add Item</button>
 
     <script>
-        Telegram.WebApp.ready();
+        const apiUrl = 'http://localhost:5000/api/items'; // URL вашего API
 
-        // Устанавливаем стиль фона на основе выбранной темы Telegram
-        const themeParams = Telegram.WebApp.themeParams || {};
-        document.body.style.setProperty('--background-color', themeParams.bg_color || '#ffffff');
-        document.body.style.setProperty('--text-color', themeParams.text_color || '#000000');
-
-        var initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
-        document.getElementById('webview_data').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
-
-        // Кнопка для копирования данных в буфер обмена
-        document.getElementById('copyButton').onclick = function() {
-            navigator.clipboard.writeText(document.getElementById('webview_data').textContent)
-                .then(() => {
-                    showToast('Данные скопированы!');
-                })
-                .catch(err => {
-                    console.error('Ошибка копирования: ', err);
-                });
-        };
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 2000); // Скрыть через 2 секунды
+        async function fetchItems() {
+            const response = await fetch(apiUrl);
+            const items = await response.json();
+            const itemList = document.getElementById('item-list');
+            itemList.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+                itemList.appendChild(li);
+            });
         }
 
-        // Раскрытие на полный экран
-        if (Telegram.WebApp.isExpanded) {
-            Telegram.WebApp.expand();
-        }
+        document.getElementById('add-item').addEventListener('click', async () => {
+            const itemName = document.getElementById('item-name').value;
+            const newItem = { id: Date.now(), name: itemName };
+            await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newItem)
+            });
+            fetchItems();
+        });
+
+        fetchItems();
     </script>
 </body>
 </html>
