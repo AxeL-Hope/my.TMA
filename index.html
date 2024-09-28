@@ -20,6 +20,7 @@
             height: 100vh;
             margin: 0;
             padding: 20px;
+            position: relative;
         }
         #version {
             position: absolute;
@@ -31,25 +32,34 @@
             font-size: 14px;
         }
         #webview_data {
-            white-space: pre-wrap;
-            max-width: 90%;
-            max-height: 60vh;
-            overflow-y: auto;
+            width: auto;
+            height: auto;
+            max-width: 60vw;
+            max-height: 60vw;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 20px;
+            font-family: Arial, sans-serif; 
+            font-size: 14px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
         }
         #notification {
             display: none;
             opacity: 0;
-            transition: opacity 0.5s;
-            margin-bottom: 10px;
+            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            bottom: 20px; 
+            left: 50%;
+            transform: translateX(-50%); 
             background: rgba(0, 255, 0, 0.8);
             padding: 10px;
             border-radius: 5px;
             color: white;
+            z-index: 1000; 
         }
         button {
             padding: 10px 15px;
@@ -66,8 +76,8 @@
     </style>
 </head>
 <body>
-    <div id="version">Версия: 0.0.2</div>
-    <h1>Get your InitData</h1>
+    <div id="version">Версия: 0.0.3</div>
+    <h1 style="text-align: center;">Get your InitData</h1>
     <div id="webview_data"></div>
     <button id="copy_data_btn">Копировать данные в буфер обмена</button>
     <div id="notification">Текст скопирован в буфер обмена!</div>
@@ -81,7 +91,22 @@
         document.body.style.setProperty('--background-color', themeParams.bg_color || '#FFFFFF');
         document.body.style.setProperty('--text-color', themeParams.text_color || '#000000');
 
-        var initData = Telegram.WebApp.initData || "";
+        // Применение colorScheme
+        const colorScheme = Telegram.WebApp.colorScheme;
+        if (colorScheme) {
+            document.body.style.setProperty('--background-color', colorScheme.bg_color || themeParams.bg_color || '#FFFFFF');
+            document.body.style.setProperty('--text-color', colorScheme.text_color || themeParams.text_color || '#000000');
+        }
+
+        // Функция для установки класса темы
+        function setThemeClass() {
+            document.documentElement.className = Telegram.WebApp.colorScheme;
+        }
+
+        Telegram.WebApp.onEvent('themeChanged', setThemeClass);
+        setThemeClass(); // Начальный вызов
+
+        var initData = Telegram.WebApp.initData || "ффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффф";
         var initDataString = JSON.stringify(initData, null, 2);
         document.getElementById('webview_data').textContent = initDataString;
 
@@ -98,13 +123,15 @@
         function showNotification() {
             var notification = document.getElementById('notification');
             notification.style.display = 'block';
-            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 300); // Небольшая задержка перед началом анимации
             setTimeout(() => {
                 notification.style.opacity = '0';
                 setTimeout(() => {
                     notification.style.display = 'none';
                 }, 500);
-            }, 2000);
+            }, 2000); // Время отображения уведомления
         }
     </script>
 </body>
