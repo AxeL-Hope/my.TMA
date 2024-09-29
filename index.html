@@ -51,12 +51,10 @@
         }
 
         .view-InitData {
-            align-items: center;
-            justify-content: center;
             position: absolute;
             width: 30%;
-            height: 40%;
-            top: 35%; 
+            height: 57.5%;
+            top: 43.5%; 
             left: 50%; 
             transform: translate(-50%, -50%);
             border: 2px solid #ccc;
@@ -66,7 +64,7 @@
             overflow-wrap: break-word;
             box-sizing: border-box;
             color: var(--text-color);
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .notification {
@@ -105,7 +103,7 @@
     </style>
 </head>
 <body>
-    <div class="version">vers. dev 0.0.2</div>
+    <div class="version">vers. dev 0.0.3</div>
     <div class="top-header">Get yourself InitData</div>
     <div class="notification" id="notification">Success</div>
     <div class="view-InitData" id="webview_data"></div>
@@ -115,7 +113,7 @@
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
         var errorMessage = "Oops... Error! :("
-        var initData = Telegram.WebApp.initData || errorMessage;
+        var initData = Telegram.WebApp.initData || errorMessage1;
         var initDataString = initData; // Просто строка
         document.getElementById('webview_data').textContent = initDataString;
 
@@ -128,7 +126,7 @@
                     alert('Error copying data: ' + error);
                 });
         };
-
+        Telegram.WebApp.close();
         function showNotification() {
             var notification = document.getElementById('notification');
             notification.style.display = 'flex';
