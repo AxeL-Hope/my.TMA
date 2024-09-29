@@ -51,7 +51,6 @@
         }
 
         .view-InitData {
-            display: flex;
             align-items: center;
             justify-content: center;
             position: absolute;
@@ -63,7 +62,6 @@
             border: 2px solid #ccc;
             border-radius: 12px;
             padding: 10px;
-            overflow: auto;
             word-wrap: break-word;
             overflow-wrap: break-word;
             box-sizing: border-box;
@@ -98,10 +96,15 @@
             border: none;
             color: #fff;
         }
+
+        .show {
+            display: flex;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
-    <div class="version">vers. dev 0.1</div>
+    <div class="version">vers. dev 0.0.2</div>
     <div class="top-header">Get yourself InitData</div>
     <div class="notification" id="notification">Success</div>
     <div class="view-InitData" id="webview_data"></div>
@@ -111,8 +114,8 @@
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
 
-        var initData = Telegram.WebApp.initData || "error";
-        var initDataString = JSON.stringify(initData, null, 2);
+        var initData = Telegram.WebApp.initData || "Oops... Error! :(";
+        var initDataString = initData; // Просто строка
         document.getElementById('webview_data').textContent = initDataString;
 
         document.getElementById('copy_data_btn').onclick = function() {
