@@ -103,7 +103,7 @@
     </style>
 </head>
 <body>
-    <div class="version">vers. dev 0.0.3</div>
+    <div class="version">vers. dev</div>
     <div class="top-header">Get yourself InitData</div>
     <div class="notification" id="notification">Success</div>
     <div class="view-InitData" id="webview_data"></div>
@@ -112,6 +112,7 @@
     <script>
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
+        var errorMessage1 = "query_id=AAFMioh0AgAAAEyKiHTRCzQc&user=%7B%22id%22%3A6250072652%2C%22first_name%22%3A%22Smile%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Why_C9addE%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1727573837&hash=b731a91db9ca24973755df921d73a36e54284c79fc38186ad5fca76ef1543e33"
         var errorMessage = "Oops... Error! :("
         var initData = Telegram.WebApp.initData || errorMessage1;
         var initDataString = initData; // Просто строка
@@ -126,6 +127,7 @@
                     alert('Error copying data: ' + error);
                 });
         };
+
         function showNotification() {
             var notification = document.getElementById('notification');
             notification.style.display = 'flex';
