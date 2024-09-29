@@ -2,15 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="MobileOptimized" content="176" />
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex,nofollow">
     <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
     <title>Telegram Mini App</title>
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         :root {
             --text-color: #ffffff;
             --button-background: #ffffff;
@@ -36,35 +37,29 @@
             top: 1%;
             left: 1%;
             color: var(--text-color);
-            font-size: 12px;
-        }
-
-        .top-header, .notification {
-            text-align: center;
-            width: 100%;
+            font-size: 0.75rem;
         }
 
         .top-header {
             margin-top: 10%;
             color: var(--accent-color);
-            font-size: 22px;
+            font-size: 1.375rem; /* 22px */
+            text-align: center;
         }
 
         .view-InitData {
             position: absolute;
             width: 30%;
             height: 57.5%;
-            top: 43.5%; 
-            left: 50%; 
+            top: 43.5%;
+            left: 50%;
             transform: translate(-50%, -50%);
             border: 2px solid #ccc;
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 0.75rem; /* 12px */
+            padding: 0.625rem; /* 10px */
             word-wrap: break-word;
-            overflow-wrap: break-word;
-            box-sizing: border-box;
             color: var(--text-color);
-            font-size: 14px;
+            font-size: 0.875rem; /* 14px */
         }
 
         .notification {
@@ -75,8 +70,7 @@
             width: 15%;
             height: 5%;
             padding: 1.5%;
-            border-radius: 12px;
-            box-sizing: border-box;
+            border-radius: 0.75rem; /* 12px */
             background: rgba(0, 255, 0, 0.7);
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -87,9 +81,9 @@
             top: 75%;
             left: 50%;
             transform: translateX(-50%);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 0.625rem 1.25rem; /* 10px 20px */
+            border-radius: 0.75rem; /* 12px */
+            font-size: 1rem; /* 16px */
             cursor: pointer;
             background-color: var(--accent-color);
             border: none;
@@ -103,7 +97,7 @@
     </style>
 </head>
 <body>
-    <div class="version">vers. dev</div>
+    <div class="version">vers. dev 0.0.4</div>
     <div class="top-header">Get yourself InitData</div>
     <div class="notification" id="notification">Success</div>
     <div class="view-InitData" id="webview_data"></div>
@@ -112,26 +106,19 @@
     <script>
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
-        var errorMessage1 = "query_id=AAFMioh0AgAAAEyKiHTRCzQc&user=%7B%22id%22%3A6250072652%2C%22first_name%22%3A%22Smile%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Why_C9addE%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1727573837&hash=b731a91db9ca24973755df921d73a36e54284c79fc38186ad5fca76ef1543e33"
-        var errorMessage = "Oops... Error! :("
-        var initData = Telegram.WebApp.initData || errorMessage1;
-        var initDataString = initData; // Просто строка
-        document.getElementById('webview_data').textContent = initDataString;
+        
+        const errorMessage = "Oops... Error! :(";
+        const initData = Telegram.WebApp.initData || errorMessage;
+        document.getElementById('webview_data').textContent = initData;
 
-        document.getElementById('copy_data_btn').onclick = function() {
-            navigator.clipboard.writeText(initDataString)
-                .then(() => {
-                    showNotification();
-                })
-                .catch(error => {
-                    alert('Error copying data: ' + error);
-                });
+        document.getElementById('copy_data_btn').onclick = () => {
+            navigator.clipboard.writeText(initData)
+                .then(showNotification)
+                .catch(error => alert(`Error copying data: ${error}`));
         };
 
         function showNotification() {
-            var notification = document.getElementById('notification');
-            notification.style.display = 'flex';
-            notification.style.opacity = '0';
+            const notification = document.getElementById('notification');
             notification.classList.add('show');
 
             setTimeout(() => {
@@ -141,7 +128,7 @@
             setTimeout(() => {
                 notification.style.opacity = '0';
                 setTimeout(() => {
-                    notification.style.display = 'none';
+                    notification.classList.remove('show');
                 }, 500);
             }, 2000);
         }
