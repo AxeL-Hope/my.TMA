@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,25 +48,28 @@
         }
 
         .view-InitData {
-            position: absolute;
-            width: 30%;
-            height: 57.5%;
-            top: 43.5%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 2px solid #ccc;
-            border-radius: 0.75rem; /* 12px */
-            padding: 0.625rem; /* 10px */
-            word-wrap: break-word;
-            color: var(--text-color);
-            font-size: 0.875rem; /* 14px */
+            position: absolute; /* Оставляем для позиционирования */
+            max-width: 50%; /* Ограничиваем максимальную ширину, чтобы не выходить за границы родителя */
+            max-height: 60%;
+            padding: 2%; /* Внутренний отступ */
+            border: 2px solid #ccc; /* Рамка */
+            border-radius: 0.75rem; /* Закругленные углы */
+            word-wrap: break-word; /* Разбивка слов */
+            color: var(--text-color); /* Цвет текста */
+            font-size: 0.675rem; /* Размер шрифта */
+            top: 50%; /* Центрируем вертикально */
+            left: 50%; /* Центрируем горизонтально */
+            transform: translate(-50%, -50%); /* Подгоняем по центру */
+            white-space: normal; /* Позволяет переносить текст */
+            display: inline-block; /* Изменяем на inline-block для автоматической ширины */
         }
+
 
         .notification {
             display: none;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10%;
+            margin-bottom: 7.5%;
             width: 15%;
             height: 5%;
             padding: 1.5%;
@@ -78,7 +81,7 @@
 
         .button {
             position: absolute;
-            top: 75%;
+            top: 80%;
             left: 50%;
             transform: translateX(-50%);
             padding: 0.625rem 1.25rem; /* 10px 20px */
@@ -106,9 +109,10 @@
     <script>
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
-        
+
+        const errorEx = "Где то мы уже это видели 👀Скоро в Telegram появятся «подарки» — наборы стикеров, которые покупаются за звёзды.Особенность фичи в том, что подарок можно закрепить в профиле, либо обменять на звёзды. Тогда вы получите 85% от стоимости."
         const errorMessage = "Oops... Error! :(";
-        const initData = Telegram.WebApp.initData || errorMessage;
+        const initData = Telegram.WebApp.initData || errorEx + errorEx + errorEx + errorEx + errorEx;
         document.getElementById('webview_data').textContent = initData;
 
         document.getElementById('copy_data_btn').onclick = () => {
