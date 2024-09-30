@@ -26,26 +26,23 @@
     sendInitData();
 
     function sendInitData() {
-        fetch('https://axel1-axelhope.amvera.io/init', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, initDataUnsafe })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Init data sent successfully:', data);
-        })
-        .catch(error => {
-            console.error('Error sending init data:', error);
-        });
-    }
+    fetch('https://axel1-axelhope.amvera.io/init', {
+        method: 'POST',
+        mode: 'no-cors', // This will allow the request to proceed
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, initDataUnsafe })
+    })
+    .then(response => {
+        // With no-cors, you won't have access to the response
+        console.log('Request sent, but response is not accessible due to no-cors mode.');
+    })
+    .catch(error => {
+        console.error('Error sending init data:', error);
+    });
+}
+
 </script>
 
 </body>
