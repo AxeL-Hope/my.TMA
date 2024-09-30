@@ -1,141 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="robots" content="noindex,nofollow">
-    <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
-    <title>Telegram Mini App</title>
-    <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --text-color: #ffffff;
-            --button-background: #ffffff;
-            --accent-color: #007acc;
-            --background-image: url('https://i.pinimg.com/736x/cc/66/29/cc66298c8514dd5069b5f591c967c24d.jpg');
-        }
-
-        body {
-            background-image: var(--background-image);
-            background-size: cover;
-            background-position: center;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .version {
-            position: absolute;
-            top: 1%;
-            left: 1%;
-            color: var(--text-color);
-            font-size: 0.75rem;
-        }
-
-        .top-header {
-            margin-top: 10%;
-            color: var(--accent-color);
-            font-size: 1.375rem; /* 22px */
-            text-align: center;
-        }
-
-        .view-InitData {
-            position: absolute; /* Оставляем для позиционирования */
-            max-width: 50%; /* Ограничиваем максимальную ширину, чтобы не выходить за границы родителя */
-            max-height: 60%;
-            padding: 2%; /* Внутренний отступ */
-            border: 2px solid #ccc; /* Рамка */
-            border-radius: 0.75rem; /* Закругленные углы */
-            word-wrap: break-word; /* Разбивка слов */
-            color: var(--text-color); /* Цвет текста */
-            font-size: 0.675rem; /* Размер шрифта */
-            top: 50%; /* Центрируем вертикально */
-            left: 50%; /* Центрируем горизонтально */
-            transform: translate(-50%, -50%); /* Подгоняем по центру */
-            white-space: normal; /* Позволяет переносить текст */
-            display: inline-block; /* Изменяем на inline-block для автоматической ширины */
-        }
-
-
-        .notification {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 7.5%;
-            width: 15%;
-            height: 5%;
-            padding: 1.5%;
-            border-radius: 0.75rem; /* 12px */
-            background: rgba(0, 255, 0, 0.7);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .button {
-            position: absolute;
-            top: 80%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.625rem 1.25rem; /* 10px 20px */
-            border-radius: 0.75rem; /* 12px */
-            font-size: 1rem; /* 16px */
-            cursor: pointer;
-            background-color: var(--accent-color);
-            border: none;
-            color: #fff;
-        }
-
-        .show {
-            display: flex;
-            opacity: 1;
-        }
-    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Telegram Bot Web App</title>
 </head>
 <body>
-    <div class="version">vers. dev 0.0.4</div>
-    <div class="top-header">Get yourself InitData</div>
-    <div class="notification" id="notification">Success</div>
-    <div class="view-InitData" id="webview_data"></div>
-    <button class="button" id="copy_data_btn">Copy</button>
 
-    <script>
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
+<script>
+    Telegram.WebApp.ready();
 
-        const errorEx = "Хм. Где то мы уже это видели 👀Скоро в Telegram появятся «подарки» — наборы стикеров, которые покупаются за звёзды.Особенность фичи в том, что подарок можно закрепить в профиле, либо обменять на звёзды. Тогда вы получите 85% от стоимости."
-        const errorMessage = "Oops... Error! :(";
-        const initData = Telegram.WebApp.initData || errorEx + errorEx + errorEx + errorEx + errorEx;
-        document.getElementById('webview_data').textContent = initData;
+    let initDataUnsafe = Telegram.WebApp.initDataUnsafe || null;
+    let userId = initDataUnsafe && initDataUnsafe.user ? initDataUnsafe.user.id : null;
 
-        document.getElementById('copy_data_btn').onclick = () => {
-            navigator.clipboard.writeText(initData)
-                .then(showNotification)
-                .catch(error => alert(`Error copying data: ${error}`));
-        };
+    if (!initDataUnsafe) {
+        initDataUnsafe = null;
+    }
 
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.classList.add('show');
+    if (!userId) {
+        userId = null;
+    }
 
-            setTimeout(() => {
-                notification.style.opacity = '1';
-            }, 300);
+    // Отправка данных сразу при загрузке страницы
+    sendInitData();
 
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 500);
-            }, 2000);
-        }
-    </script>
+    function sendInitData() {
+        fetch('https://axel1-axelhope.amvera.io/init', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, initDataUnsafe })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Init data sent successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error sending init data:', error);
+        });
+    }
+</script>
+
 </body>
 </html>
